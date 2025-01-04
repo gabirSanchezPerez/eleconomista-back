@@ -32,6 +32,7 @@ class FormController extends Controller
 
     public function index()
     {
-        return Form::with('fields')->get();
+        $forms = Form::with('fields')->get();
+        return response()->json(['forms' => $forms], 201);
     }
 }

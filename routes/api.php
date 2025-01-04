@@ -12,8 +12,10 @@ Route::get('/user', function (Request $request) {
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
+Route::get('/form', [FormController::class, 'index']);
+
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('logout', [AuthController::class, 'logout']);
+    Route::get('logout', [AuthController::class, 'logout']);
     Route::get('forms', [FormController::class, 'index']);
     Route::post('forms', [FormController::class, 'store']);
 });
