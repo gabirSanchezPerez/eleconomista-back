@@ -16,6 +16,7 @@ class FormController extends Controller
             'fields.*.label' => 'required|string',
             'fields.*.type' => 'required|string',
             'fields.*.name_id' => 'required|string',
+            'fields.*.options' => 'string',
         ]);
 
         $form = Form::create([
