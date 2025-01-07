@@ -18,4 +18,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('logout', [AuthController::class, 'logout']);
     Route::get('forms', [FormController::class, 'index']);
     Route::post('forms', [FormController::class, 'store']);
+    Route::get('forms/{id}', [FormController::class, 'show']);
 });
