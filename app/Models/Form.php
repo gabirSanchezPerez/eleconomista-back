@@ -18,4 +18,9 @@ class Form extends Model
     {
         return $this->hasMany(Field::class); // Relación con otro modelo
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

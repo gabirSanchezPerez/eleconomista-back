@@ -16,7 +16,6 @@ class FormController extends Controller
             'fields.*.label' => 'required|string',
             'fields.*.type' => 'required|string',
             'fields.*.name_id' => 'required|string',
-            'fields.*.options' => 'string',
         ]);
 
         $form = Form::create([
@@ -28,13 +27,31 @@ class FormController extends Controller
             $form->fields()->create($field);
         }
 
-        return response()->json(['form' => $form], 201);
+        return response()->json(['form' => $form, "status" => 200], 201);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $forms = Form::with('fields')->get();
-        return response()->json(['forms' => $forms], 201);
+        //$forms = Form::with('fields')->with('user')->get();
+        $query = Form::query();
+
+        // Filtrar por fecha
+        if ($request->has('filters.date')  && !is_null($request->input('filters')['date'])) {
+            $query->whereDate('created_at', 'LIKE', $request->input('filters')['date'] . '%');
+        }
+
+        // Filtrar por nombre de usuario
+        if ($request->has('filters.user') && !empty($request->input('filters')['user'])) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('name', 'LIKE', '%' . $request->input('filters')['user'] . '%');
+            });
+        }
+
+        // Incluir la relación de usuario
+        $forms = $query->with('user')->get();
+        return response()->json([
+            'forms' => $forms, "status" => 200, $request->has('filters.date'), $request->input('filters')
+        ], 201);
     }
 
     public function show($id)
